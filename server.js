@@ -326,31 +326,32 @@ body{
 
 }
 
-/* =========================
-   CREATE PDF
-========================= */
-
 async function createPDF(html, certId){
 
-    const options = {
-        format: "A4",
-        landscape: true
-    };
+    const browser = await puppeteer.launch({
+        headless:true
+    });
 
-    const file = {
-        content: html
-    };
+    const page = await browser.newPage();
 
-    const pdfBuffer = await html_to_pdf.generatePdf(file, options);
+    await page.setContent(html, {
+        waitUntil:"networkidle0"
+    });
 
     const pdfPath = `certificate-${certId}.pdf`;
 
-    fs.writeFileSync(pdfPath, pdfBuffer);
+    await page.pdf({
+        path: pdfPath,
+        format: "A4",
+        landscape: true,
+        printBackground: true
+    });
+
+    await browser.close();
 
     return pdfPath;
 
 }
-
 /* =========================
    SUBMIT API
 ========================= */
