@@ -1,40 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Skill Fair 2026</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Skill Fair 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.container{
+  background:#111827;
+  padding:25px;
+  border-radius:15px;
+  width:90%;
+  max-width:420px;
+  box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+
+h2{
+  text-align:center;
+  color:#38bdf8;
+  margin-bottom:20px;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border:none;
+  border-radius:8px;
+  background:#1f2937;
+  color:white;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  background:#22c55e;
+  border:none;
+  color:white;
+  font-size:16px;
+  border-radius:8px;
+  margin-top:10px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#16a34a;
+}
+
+#msg{
+  text-align:center;
+  margin-top:10px;
+  color:#fff;
+}
+</style>
+
 </head>
 <body>
 
 <div class="container">
+  <h2>Skill Fair 2026</h2>
 
-  <h1>Skill Fair 2026</h1>
+  <input id="name" placeholder="Full Name">
+  <input id="course" placeholder="Course">
+  <input id="semester" placeholder="Semester">
+  <input id="project" placeholder="Project Name">
+  <input id="place" placeholder="Place">
+  <input id="email" placeholder="Email">
 
-  <form id="studentForm">
-
-    <input type="text" placeholder="Full Name" id="name" required>
-
-    <input type="text" placeholder="Course" id="course" required>
-
-    <input type="text" placeholder="Semester" id="semester" required>
-
-    <input type="text" placeholder="Project Name" id="project" required>
-
-    <input type="text" placeholder="Place" id="place" required>
-
-    <input type="email" placeholder="Email Address" id="email" required>
-
-    <button type="submit">
-      Submit Project
-    </button>
-
-  </form>
+  <button onclick="submitData()">Submit</button>
 
   <p id="msg"></p>
-
 </div>
 
-<script src="script.js"></script>
+<script>
+async function submitData(){
+
+  const data = {
+    name: document.getElementById("name").value,
+    course: document.getElementById("course").value,
+    semester: document.getElementById("semester").value,
+    project: document.getElementById("project").value,
+    place: document.getElementById("place").value,
+    email: document.getElementById("email").value
+  };
+
+  document.getElementById("msg").innerText = "Submitting...";
+
+  try{
+    const res = await fetch("http://localhost:3000/submit", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+
+    if(result.success){
+      document.getElementById("msg").innerText = "Submitted Successfully!";
+    } else {
+      document.getElementById("msg").innerText = "Failed!";
+    }
+
+  }catch(err){
+    document.getElementById("msg").innerText = "Server Error!";
+    console.log(err);
+  }
+
+}
+</script>
 
 </body>
 </html>
