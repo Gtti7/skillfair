@@ -3,7 +3,7 @@ const fs = require("fs");
 const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const html_to_pdf = require("html-pdf-node");
+const puppeteer = require("puppeteer");
 
 const app = express();
 
