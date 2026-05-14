@@ -2,112 +2,322 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Skill Fair 2026</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill Fair 2026 Certificate</title>
 
 <style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
 body{
-  margin:0;
-  font-family:Arial;
-  background:linear-gradient(135deg,#0f172a,#1e293b);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
+    background:#0f172a;
+    font-family:'Times New Roman', serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding:20px;
 }
 
-.container{
-  background:#111827;
-  padding:25px;
-  border-radius:15px;
-  width:90%;
-  max-width:420px;
-  box-shadow:0 0 20px rgba(0,0,0,0.5);
+/* A4 LANDSCAPE */
+.certificate{
+    width:1123px;
+    height:794px;
+    background:white;
+    position:relative;
+    overflow:hidden;
+    border:12px solid #c89b3c;
+    box-shadow:0 0 40px rgba(0,0,0,0.5);
 }
 
-h2{
-  text-align:center;
-  color:#38bdf8;
-  margin-bottom:20px;
+/* BACKGROUND DESIGN */
+.certificate::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+    radial-gradient(circle at top left,#0b1f4d 0%,transparent 30%),
+    radial-gradient(circle at bottom right,#0b1f4d 0%,transparent 30%);
+    opacity:0.08;
 }
 
-input{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border:none;
-  border-radius:8px;
-  background:#1f2937;
-  color:white;
+.border-inner{
+    position:absolute;
+    top:15px;
+    left:15px;
+    right:15px;
+    bottom:15px;
+    border:3px solid #d4af37;
 }
 
-button{
-  width:100%;
-  padding:12px;
-  background:#22c55e;
-  border:none;
-  color:white;
-  font-size:16px;
-  border-radius:8px;
-  margin-top:10px;
-  cursor:pointer;
+/* HEADER */
+.top-banner{
+    width:100%;
+    background:linear-gradient(90deg,#0b1f4d,#122b66,#0b1f4d);
+    color:white;
+    text-align:center;
+    padding:16px;
+    font-size:42px;
+    font-weight:bold;
+    letter-spacing:3px;
+    border-bottom:5px solid #d4af37;
 }
 
-button:hover{
-  background:#16a34a;
+.sub{
+    font-size:22px;
+    color:#d4af37;
+    margin-top:8px;
 }
 
-#msg{
-  text-align:center;
-  margin-top:10px;
-  color:#fff;
+/* CERTIFICATE BODY */
+.content{
+    padding:40px 80px;
+    text-align:center;
 }
+
+.cert-title{
+    font-size:80px;
+    font-weight:bold;
+    color:#0b1f4d;
+    letter-spacing:5px;
+}
+
+.participation{
+    font-size:36px;
+    color:#b8860b;
+    margin-top:10px;
+    letter-spacing:2px;
+}
+
+.line{
+    width:300px;
+    height:3px;
+    background:#b8860b;
+    margin:20px auto;
+}
+
+.text{
+    font-size:28px;
+    color:#333;
+    margin-top:20px;
+}
+
+.student-name{
+    font-size:72px;
+    color:#0b1f4d;
+    font-family:cursive;
+    margin:25px 0;
+    font-weight:bold;
+}
+
+.project{
+    font-size:40px;
+    color:#0b1f4d;
+    font-weight:bold;
+    margin-top:15px;
+}
+
+.course{
+    color:#b8860b;
+    font-weight:bold;
+}
+
+/* CERTIFICATE ID */
+.cert-id{
+    position:absolute;
+    top:120px;
+    right:60px;
+    text-align:right;
+    font-size:20px;
+    color:#111;
+    font-weight:bold;
+}
+
+/* QR */
+.qr{
+    width:120px;
+    height:120px;
+    background:white;
+    border:3px solid #000;
+    margin-top:15px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:14px;
+}
+
+/* FOOTER */
+.footer{
+    position:absolute;
+    bottom:90px;
+    left:0;
+    width:100%;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+}
+
+.sign{
+    text-align:center;
+}
+
+.signature{
+    font-family:cursive;
+    font-size:40px;
+    color:#000;
+}
+
+.sign-line{
+    width:220px;
+    height:2px;
+    background:#000;
+    margin:5px auto;
+}
+
+.sign-title{
+    font-size:22px;
+    color:#0b1f4d;
+    font-weight:bold;
+}
+
+/* BOTTOM BAR */
+.bottom{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    background:linear-gradient(90deg,#0b1f4d,#122b66,#0b1f4d);
+    color:white;
+    text-align:center;
+    padding:18px;
+    border-top:5px solid #d4af37;
+}
+
+.bottom h2{
+    font-size:32px;
+    letter-spacing:2px;
+}
+
+.bottom p{
+    font-size:22px;
+    color:#d4af37;
+    margin-top:5px;
+}
+
+/* PRINT */
+@media print{
+
+    body{
+        background:none;
+        padding:0;
+    }
+
+    .certificate{
+        box-shadow:none;
+        width:100%;
+        height:100vh;
+        margin:0;
+        border:10px solid #c89b3c;
+    }
+
+}
+
 </style>
-
 </head>
+
 <body>
 
-<div class="container">
-  <h2>Skill Fair 2026</h2>
+<div class="certificate">
 
-  <input id="name" placeholder="Full Name">
-  <input id="course" placeholder="Course">
-  <input id="semester" placeholder="Semester">
-  <input id="project" placeholder="Project Name">
-  <input id="place" placeholder="Place">
-  <input id="email" placeholder="Email">
+    <div class="border-inner"></div>
 
-  <button onclick="submitData()">Submit</button>
+    <div class="top-banner">
+        SKILL FAIR 2026
+        <div class="sub">THE GEORGE TELEGRAPH TRAINING INSTITUTE</div>
+    </div>
 
-  <p id="msg"></p>
+    <div class="cert-id">
+        CERTIFICATE ID<br>
+        GTTI-2026-001
+
+        <div class="qr">
+            QR CODE
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div class="cert-title">
+            CERTIFICATE
+        </div>
+
+        <div class="participation">
+            OF PARTICIPATION
+        </div>
+
+        <div class="line"></div>
+
+        <div class="text">
+            This is to certify that
+        </div>
+
+        <div class="student-name">
+            Rahul Kumar
+        </div>
+
+        <div class="line"></div>
+
+        <div class="text">
+            of <span class="course">CAOM</span> has successfully participated in
+        </div>
+
+        <div class="project">
+            SKILL FAIR 2026
+        </div>
+
+        <div class="text">
+            for the project titled
+        </div>
+
+        <div class="project">
+            “Smart AI Camera”
+        </div>
+
+        <div class="text">
+            held at Midnapore Centre.<br>
+            We appreciate your creativity, hard work and contribution.
+        </div>
+
+    </div>
+
+    <div class="footer">
+
+        <div class="sign">
+            <div class="signature">Aman</div>
+            <div class="sign-line"></div>
+            <div class="sign-title">DIRECTOR</div>
+        </div>
+
+        <div class="sign">
+            <div class="signature">Bunita</div>
+            <div class="sign-line"></div>
+            <div class="sign-title">CENTRE HEAD</div>
+        </div>
+
+    </div>
+
+    <div class="bottom">
+        <h2>THE GEORGE TELEGRAPH TRAINING INSTITUTE</h2>
+        <p>MIDNAPORE CENTRE</p>
+    </div>
+
 </div>
 
-<script>
-async function submitData(){
-
-  const data = {
-    name: document.getElementById("name").value,
-    course: document.getElementById("course").value,
-    semester: document.getElementById("semester").value,
-    project: document.getElementById("project").value,
-    place: document.getElementById("place").value,
-    email: document.getElementById("email").value
-  };
-
-  document.getElementById("msg").innerText = "Submitting...";
-
-  try{
-    const res = await fetch("http://localhost:3000/submit", {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify(data)
-    });
-
-    const result = await res.json();
-
-    if(result.success){
+</body>
+</html>    if(result.success){
       document.getElementById("msg").innerText = "Submitted Successfully!";
     } else {
       document.getElementById("msg").innerText = "Failed!";
