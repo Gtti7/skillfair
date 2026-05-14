@@ -31,8 +31,8 @@ function saveData(data){
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "yourgmail@gmail.com",
-    pass: "your_app_password"
+    user: "neelgeorgetelegraph@gmail.com",
+    pass: "bqdt zbbx qild arwu"
   }
 });
 
@@ -56,7 +56,7 @@ app.post("/submit", (req,res)=>{
 
   // send email
   transporter.sendMail({
-    from: "Skill Fair 2026 <yourgmail@gmail.com>",
+    from: "Skill Fair 2026 <neelgeorgetelegraph@gmail.com>",
     to: data.email,
     subject: "Skill Fair 2026 Certificate",
     text: `
