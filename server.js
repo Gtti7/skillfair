@@ -1,9 +1,9 @@
 const express = require("express");
 const fs = require("fs");
-const path = require("path");
 const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const html_to_pdf = require("html-pdf-node");
 
 const app = express();
 
@@ -17,14 +17,19 @@ app.use(cors());
 const dataFile = "data.json";
 
 function loadData() {
+
     if (!fs.existsSync(dataFile)) {
         fs.writeFileSync(dataFile, "[]");
     }
+
     return JSON.parse(fs.readFileSync(dataFile));
+
 }
 
 function saveData(data) {
+
     fs.writeFileSync(dataFile, JSON.stringify(data, null, 2));
+
 }
 
 /* =========================
@@ -32,11 +37,14 @@ function saveData(data) {
 ========================= */
 
 const transporter = nodemailer.createTransport({
+
     service: "gmail",
+
     auth: {
         user: "neelgeorgetelegraph@gmail.com",
         pass: "bqdt zbbx qild arwu"
     }
+
 });
 
 /* =========================
@@ -46,6 +54,7 @@ const transporter = nodemailer.createTransport({
 function generateCertificate(data, certId){
 
 return `
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,6 +79,7 @@ body{
 }
 
 /* INNER BORDER */
+
 .inner{
     position:absolute;
     top:15px;
@@ -80,6 +90,7 @@ body{
 }
 
 /* HEADER */
+
 .top{
     background:linear-gradient(90deg,#0b1f4d,#122b66,#0b1f4d);
     color:white;
@@ -100,7 +111,8 @@ body{
     font-size:20px;
 }
 
-/* CERT ID */
+/* CERTIFICATE ID */
+
 .cert-id{
     position:absolute;
     top:110px;
@@ -111,6 +123,7 @@ body{
 }
 
 /* CONTENT */
+
 .content{
     padding:40px 80px;
     text-align:center;
@@ -149,6 +162,283 @@ body{
     margin:20px 0;
     font-weight:bold;
 }
+
+.project{
+    font-size:40px;
+    color:#0b1f4d;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.course{
+    color:#b8860b;
+    font-weight:bold;
+}
+
+/* FOOTER */
+
+.footer{
+    position:absolute;
+    bottom:100px;
+    width:100%;
+    display:flex;
+    justify-content:space-around;
+}
+
+.sign{
+    text-align:center;
+}
+
+.signature{
+    font-family:cursive;
+    font-size:38px;
+}
+
+.sign-line{
+    width:220px;
+    height:2px;
+    background:#000;
+    margin:5px auto;
+}
+
+.sign-title{
+    font-size:22px;
+    font-weight:bold;
+    color:#0b1f4d;
+}
+
+/* BOTTOM */
+
+.bottom{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    background:linear-gradient(90deg,#0b1f4d,#122b66,#0b1f4d);
+    color:white;
+    text-align:center;
+    padding:18px;
+    border-top:5px solid #d4af37;
+}
+
+.bottom h2{
+    margin:0;
+    font-size:30px;
+}
+
+.bottom p{
+    margin:5px 0 0;
+    color:#d4af37;
+    font-size:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="certificate">
+
+<div class="inner"></div>
+
+<div class="top">
+    <h1>SKILL FAIR 2026</h1>
+    <p>THE GEORGE TELEGRAPH TRAINING INSTITUTE</p>
+</div>
+
+<div class="cert-id">
+    CERTIFICATE ID<br>
+    ${certId}
+</div>
+
+<div class="content">
+
+    <div class="title">
+        CERTIFICATE
+    </div>
+
+    <div class="sub">
+        OF PARTICIPATION
+    </div>
+
+    <div class="line"></div>
+
+    <div class="text">
+        This is to certify that
+    </div>
+
+    <div class="name">
+        ${data.name}
+    </div>
+
+    <div class="line"></div>
+
+    <div class="text">
+        of <span class="course">${data.course}</span> has successfully participated in
+    </div>
+
+    <div class="project">
+        SKILL FAIR 2026
+    </div>
+
+    <div class="text">
+        for the project titled
+    </div>
+
+    <div class="project">
+        "${data.project}"
+    </div>
+
+    <div class="text">
+        held at ${data.place}.<br>
+        We appreciate your creativity, hard work and contribution.
+    </div>
+
+</div>
+
+<div class="footer">
+
+    <div class="sign">
+        <div class="signature">Aman</div>
+        <div class="sign-line"></div>
+        <div class="sign-title">DIRECTOR</div>
+    </div>
+
+    <div class="sign">
+        <div class="signature">Bunita</div>
+        <div class="sign-line"></div>
+        <div class="sign-title">CENTRE HEAD</div>
+    </div>
+
+</div>
+
+<div class="bottom">
+    <h2>THE GEORGE TELEGRAPH TRAINING INSTITUTE</h2>
+    <p>MIDNAPORE CENTRE</p>
+</div>
+
+</div>
+
+</body>
+</html>
+
+`;
+
+}
+
+/* =========================
+   CREATE PDF
+========================= */
+
+async function createPDF(html, certId){
+
+    const options = {
+        format: "A4",
+        landscape: true
+    };
+
+    const file = {
+        content: html
+    };
+
+    const pdfBuffer = await html_to_pdf.generatePdf(file, options);
+
+    const pdfPath = `certificate-${certId}.pdf`;
+
+    fs.writeFileSync(pdfPath, pdfBuffer);
+
+    return pdfPath;
+
+}
+
+/* =========================
+   SUBMIT API
+========================= */
+
+app.post("/submit", async (req, res) => {
+
+    const data = req.body;
+
+    const db = loadData();
+
+    const certId = "GTTI-" + Date.now();
+
+    const newEntry = {
+        ...data,
+        certId,
+        date: new Date()
+    };
+
+    db.push(newEntry);
+
+    saveData(db);
+
+    /* GENERATE CERTIFICATE */
+
+    const certificateHTML = generateCertificate(data, certId);
+
+    /* CREATE PDF */
+
+    const pdfPath = await createPDF(certificateHTML, certId);
+
+    try {
+
+        await transporter.sendMail({
+
+            from: "Skill Fair 2026 <neelgeorgetelegraph@gmail.com>",
+
+            to: data.email,
+
+            subject: "Skill Fair 2026 Certificate",
+
+            html: `
+            <h2>Hello ${data.name}</h2>
+
+            <p>
+            Congratulations!<br>
+            Your Skill Fair 2026 certificate is attached below.
+            </p>
+
+            <p>
+            Certificate ID: <b>${certId}</b>
+            </p>
+            `,
+
+            attachments:[
+            {
+                filename:`SkillFair-${certId}.pdf`,
+                path:pdfPath
+            }
+            ]
+
+        });
+
+        res.json({
+            success:true,
+            certId
+        });
+
+    } catch(err){
+
+        console.log(err);
+
+        res.json({
+            success:false
+        });
+
+    }
+
+});
+
+/* =========================
+   START SERVER
+========================= */
+
+app.listen(3000, ()=>{
+
+    console.log("Server running on http://localhost:3000");
+
+});}
 
 .project{
     font-size:40px;
